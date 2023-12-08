@@ -1,0 +1,38 @@
+{% block user_details %}
+  <div class="col-sm-9">
+    <div class="row">
+
+      {% for msg in likes %}
+        <div class="col-lg-4 col-md-6 col-12">
+          <div class="card user-card">
+            <div class="card-inner">
+              <div class="image-wrapper">
+                <img src="{{ msg.user.header_image_url }}" alt="" class="card-hero">
+              </div>
+              <div class="card-contents">
+                <a href="/users/{{ msg.user.id }}" class="card-link">
+                  <img src="{{ msg.user.image_url }}" alt="Image for {{ msg.user.username }}" class="card-image">
+                  <p>@{{ msg.user.username }}</p>
+                </a>
+
+                {# Add your like/unlike logic here based on user.likes #}
+                {% if g.user.likes|selectattr('message_id', 'equalto', msg.id)|list %}
+                  <form method="POST" action="/unlike/{{ msg.id }}">
+                    <button class="btn btn-primary btn-sm">Unlike</button>
+                  </form>
+                {% else %}
+                  <form method="POST" action="/users/add_like/{{ msg.id }}">
+                    <button class="btn btn-outline-primary btn-sm">Like</button>
+                  </form>
+                {% endif %}
+
+              </div>
+              <p class="card-bio">{{ msg.text }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+    </div>
+  </div>
+{% endblock %}
